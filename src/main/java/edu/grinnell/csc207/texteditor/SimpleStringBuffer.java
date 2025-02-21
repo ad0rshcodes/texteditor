@@ -1,4 +1,4 @@
-package edu.grinnell.csc207.texteditor
+package edu.grinnell.csc207.texteditor;
 
 /**
  * A naive implementation of a text buffer using a String.
