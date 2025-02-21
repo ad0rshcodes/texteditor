@@ -1,39 +1,96 @@
-package edu.grinnell.csc207.texteditor;
+package edu.grinnell.csc207.texteditor
 
 /**
- * A naive implementation of a text buffer using a <code>String</code>.
+ * A naive implementation of a text buffer using a String.
  */
-public class SimpleStringBuffer {
+class SimpleStringBuffer {
+    private StringBuilder buffer;
+    private int cursor;
+
+    /**
+     * Constructs a new, empty SimpleStringBuffer.
+     */
+    public SimpleStringBuffer() {
+        buffer = new StringBuilder();
+        cursor = 0;
+    }
+
+    /**
+     * Inserts a character at the cursor position.
+     * 
+     * @param ch The character to insert.
+     */
     public void insert(char ch) {
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        buffer.insert(cursor, ch);
+        cursor++;
     }
 
+    /**
+     * Deletes the character before the cursor.
+     */
     public void delete() {
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        if (cursor > 0) {
+            buffer.deleteCharAt(--cursor);
+        }
     }
 
-    public int getCursorPosition() {
-        throw new UnsupportedOperationException("Unimplemented method 'getCursorPosition'");
-    }
-
+    /**
+     * Moves the cursor one position to the left.
+     */
     public void moveLeft() {
-        throw new UnsupportedOperationException("Unimplemented method 'moveLeft'");
+        if (cursor > 0) {
+            cursor--;
+        }
     }
 
+    /**
+     * Moves the cursor one position to the right.
+     */
     public void moveRight() {
-        throw new UnsupportedOperationException("Unimplemented method 'moveRight'");
+        if (cursor < buffer.length()) {
+            cursor++;
+        }
     }
 
+    /**
+     * Returns the cursor position.
+     * 
+     * @return The current cursor position.
+     */
+    public int getCursorPosition() {
+        return cursor;
+    }
+
+    /**
+     * Returns the size of the buffer.
+     * 
+     * @return The size of the buffer.
+     */
     public int getSize() {
-        throw new UnsupportedOperationException("Unimplemented method 'getSize'");
+        return buffer.length();
     }
 
+    /**
+     * Retrieves the character at the specified index.
+     * 
+     * @param i The index of the character.
+     * @return The character at the given index.
+     * @throws IndexOutOfBoundsException If the index is invalid.
+     */
     public char getChar(int i) {
-        throw new UnsupportedOperationException("Unimplemented method 'getChar'");
+        if (i < 0 || i >= buffer.length()) {
+            throw new IndexOutOfBoundsException("Invalid index");
+        }
+        return buffer.charAt(i);
     }
 
+    /**
+     * Returns the contents of the buffer as a string.
+     * 
+     * @return The string representation of the buffer.
+     */
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("Unimplemented method 'toString'");
+        return buffer.toString();
     }
 }
