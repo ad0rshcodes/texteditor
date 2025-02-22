@@ -62,7 +62,7 @@ public class SimpleStringBuffer {
     /**
      * Moves the cursor forward by one position.
      */
-    public void moveRights() {
+    public void moveRight() {
         if (cursor < buffer.length()) {
             cursor++;
         }

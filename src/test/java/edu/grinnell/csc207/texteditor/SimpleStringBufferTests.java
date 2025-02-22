@@ -63,7 +63,7 @@ public class SimpleStringBufferTests {
         SimpleStringBuffer buffer = new SimpleStringBuffer();
         buffer.insert('a');
         buffer.insert('b');
-        buffer.moveRights();
+        buffer.moveRight();
         assertEquals(2, buffer.getCursorPosition()); // cursor shouldn't go off the edge
         buffer.moveLeft();
         buffer.moveLeft();
