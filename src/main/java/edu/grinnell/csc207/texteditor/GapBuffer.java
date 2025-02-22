@@ -4,48 +4,63 @@ package edu.grinnell.csc207.texteditor;
  * A gap buffer-based implementation of a text buffer.
  */
 public class GapBuffer {
-    private char[] buffer;
-    private int gapStart;
-    private int gapEnd;
+    private static final int INITIAL_CAPACITY = 10;
+    private char[] buffer; // backing array for the buffer
+    private int gapStart; // start index of the gap
+    private int gapEnd; // end index of the gap
+    private int cursor; // current position of the cursor
 
-    /**
-     * Constructs a new, empty GapBuffer with an initial capacity.
-     */
     public GapBuffer() {
-        buffer = new char[10];
+        buffer = new char[INITIAL_CAPACITY];
         gapStart = 0;
         gapEnd = buffer.length;
+        cursor = 0;
     }
 
     /**
-     * Inserts a character at the cursor position.
+     * Inserts a character at the current cursor position.
      * 
-     * @param ch The character to insert.
+     * @param ch the character to insert
      */
     public void insert(char ch) {
+        // If the gap is empty, expand the buffer
         if (gapStart == gapEnd) {
             expandBuffer();
         }
-        buffer[gapStart++] = ch;
-        System.out.println("Inserted: " + ch + ", Buffer: " + this.toString()); // Debug line
 
+        buffer[gapStart] = ch;
+        gapStart++;
+        cursor++;
     }
 
     /**
      * Deletes the character before the cursor.
      */
     public void delete() {
-        if (gapStart > 0) {
+        if (cursor > 0) {
             gapStart--;
+            cursor--;
         }
+    }
+
+    /**
+     * Returns the current cursor position.
+     * 
+     * @return the cursor position
+     */
+    public int getCursorPosition() {
+        return cursor;
     }
 
     /**
      * Moves the cursor one position to the left.
      */
     public void moveLeft() {
-        if (gapStart > 0) {
-            buffer[--gapEnd] = buffer[--gapStart];
+        if (cursor > 0) {
+            buffer[gapEnd - 1] = buffer[gapStart - 1];
+            gapStart--;
+            gapEnd--;
+            cursor--;
         }
     }
 
@@ -53,71 +68,68 @@ public class GapBuffer {
      * Moves the cursor one position to the right.
      */
     public void moveRight() {
-        if (gapEnd < buffer.length) {
-            buffer[gapStart++] = buffer[gapEnd++];
+        if (cursor < buffer.length - (gapEnd - gapStart)) {
+
+            buffer[gapStart] = buffer[gapEnd];
+            gapStart++;
+            gapEnd++;
+            cursor++;
         }
     }
 
     /**
-     * Returns the cursor position.
+     * Returns the size of the buffer (number of characters).
      * 
-     * @return The current cursor position.
-     */
-    public int getCursorPosition() {
-        return gapStart;
-    }
-
-    /**
-     * Returns the size of the text in the buffer.
-     * 
-     * @return The size of the buffer excluding the gap.
+     * @return the size of the buffer
      */
     public int getSize() {
-        return buffer.length - (gapEnd - gapStart);
+        return gapStart + (buffer.length - gapEnd);
     }
 
     /**
-     * Retrieves the character at the specified index.
+     * Returns the character at the specified index.
      * 
-     * @param i The index of the character.
-     * @return The character at the given index.
-     * @throws IndexOutOfBoundsException If the index is invalid.
+     * @param i the index of the character to retrieve
+     * @return the character at the specified index
+     * @throws IndexOutOfBoundsException if the index is invalid
      */
     public char getChar(int i) {
         if (i < 0 || i >= getSize()) {
-            throw new IndexOutOfBoundsException("Invalid index");
+            throw new IndexOutOfBoundsException("Index out of bounds: " + i);
         }
-        return i < gapStart ? buffer[i] : buffer[i + (gapEnd - gapStart)];
+
+        // If the index is before the gap, return the character from the left segment
+        if (i < gapStart) {
+            return buffer[i];
+        }
+        // else, return the character from the right segment
+        return buffer[gapEnd + (i - gapStart)];
     }
 
     /**
      * Returns the contents of the buffer as a string.
      * 
-     * @return The string representation of the buffer.
+     * @return the buffer contents
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < gapStart; i++) {
-            sb.append(buffer[i]);
-        }
-        for (int i = gapEnd; i < buffer.length; i++) {
-            sb.append(buffer[i]);
-        }
-        System.out.println("Generated String: " + sb.toString()); // Debug
-
-        return sb.toString();
+        return new String(buffer, 0, gapStart) + new String(buffer, gapEnd, buffer.length - gapEnd);
     }
 
     /**
-     * Expands the buffer when the gap is full.
+     * Expands the buffer to make room for more characters.
      */
     private void expandBuffer() {
-        int newSize = buffer.length * 2;
-        char[] newBuffer = new char[newSize];
+        // new buffer with double capacity
+        char[] newBuffer = new char[buffer.length * 2];
+
         System.arraycopy(buffer, 0, newBuffer, 0, gapStart);
-        System.arraycopy(buffer, gapEnd, newBuffer, newSize - (buffer.length - gapEnd), buffer.length - gapEnd);
-        gapEnd = newSize - (buffer.length - gapEnd);
+
+        System.arraycopy(buffer, gapEnd, newBuffer, newBuffer.length - (buffer.length - gapEnd),
+                buffer.length - gapEnd);
+
+        gapEnd = newBuffer.length - (buffer.length - gapEnd);
+
         buffer = newBuffer;
     }
 }
