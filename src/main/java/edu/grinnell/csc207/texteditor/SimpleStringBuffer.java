@@ -1,96 +1,59 @@
 package edu.grinnell.csc207.texteditor;
 
-/**
- * A naive implementation of a text buffer using a String.
- */
-class SimpleStringBuffer {
-    private StringBuilder buffer;
+public class SimpleStringBuffer {
+    // backing string for the buffer
+    private String buffer;
     private int cursor;
 
-    /**
-     * Constructs a new, empty SimpleStringBuffer.
-     */
     public SimpleStringBuffer() {
-        buffer = new StringBuilder();
-        cursor = 0;
+        this.buffer = "";
+        this.cursor = 0;
     }
 
-    /**
-     * Inserts a character at the cursor position.
-     * 
-     * @param ch The character to insert.
-     */
+    // Inserts a character at the cursor position and moves the cursor forward
     public void insert(char ch) {
-        buffer.insert(cursor, ch);
+        buffer = buffer.substring(0, cursor) + ch + buffer.substring(cursor);
         cursor++;
     }
 
-    /**
-     * Deletes the character before the cursor.
-     */
+    // Deletes the character before the cursor and moves the cursor backward
     public void delete() {
-        if (cursor > 0) {
-            buffer.deleteCharAt(--cursor);
+        if (cursor > 0 && buffer.length() > 0) {
+            buffer = buffer.substring(0, cursor - 1) + buffer.substring(cursor);
+            cursor--;
         }
     }
 
-    /**
-     * Moves the cursor one position to the left.
-     */
-    public void moveLeft() {
+    // Returns the current cursor position
+    public int getCursorPosition() {
+        return cursor;
+    }
+
+    // Moves cursor backward
+    public void moveBackwards() {
         if (cursor > 0) {
             cursor--;
         }
     }
 
-    /**
-     * Moves the cursor one position to the right.
-     */
-    public void moveRight() {
+    // Moves cursor forward
+    public void moveForwards() {
         if (cursor < buffer.length()) {
             cursor++;
         }
     }
 
-    /**
-     * Returns the cursor position.
-     * 
-     * @return The current cursor position.
-     */
-    public int getCursorPosition() {
-        return cursor;
-    }
-
-    /**
-     * Returns the size of the buffer.
-     * 
-     * @return The size of the buffer.
-     */
-    public int getSize() {
-        return buffer.length();
-    }
-
-    /**
-     * Retrieves the character at the specified index.
-     * 
-     * @param i The index of the character.
-     * @return The character at the given index.
-     * @throws IndexOutOfBoundsException If the index is invalid.
-     */
+    // Returns the character at the specified index
     public char getChar(int i) {
         if (i < 0 || i >= buffer.length()) {
-            throw new IndexOutOfBoundsException("Invalid index");
+            throw new IndexOutOfBoundsException("Index out of bounds: " + i);
         }
         return buffer.charAt(i);
     }
 
-    /**
-     * Returns the contents of the buffer as a string.
-     * 
-     * @return The string representation of the buffer.
-     */
+    // Returns the contents of the buffer as a string
     @Override
     public String toString() {
-        return buffer.toString();
+        return buffer;
     }
 }
