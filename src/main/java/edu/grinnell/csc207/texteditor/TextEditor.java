@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 public class TextEditor {
 
     private GapBuffer buffer;
+
     private Screen screen;
 
     /**
@@ -32,7 +33,8 @@ public class TextEditor {
         Path path = Paths.get(filePath);
         if (Files.exists(path)) {
             String fileContents = Files.readString(path);
-            for (char ch : fileContents.toCharArray()) { // used a different format of for loop for concise code.
+            // used a different format of for loop for concise code.
+            for (char ch : fileContents.toCharArray()) {
                 buffer.insert(ch);
             }
         }

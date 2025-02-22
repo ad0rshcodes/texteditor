@@ -31,7 +31,7 @@ public class SimpleStringBufferTests {
         SimpleStringBuffer buffer = new SimpleStringBuffer();
         buffer.insert('a');
         buffer.insert('b');
-        buffer.moveBackwards();
+        buffer.moveLeft();
         buffer.insert('c');
         assertEquals("acb", buffer.toString());
         assertEquals(2, buffer.getCursorPosition());
@@ -42,7 +42,7 @@ public class SimpleStringBufferTests {
         SimpleStringBuffer buffer = new SimpleStringBuffer();
         buffer.insert('a');
         buffer.insert('b');
-        buffer.moveBackwards();
+        buffer.moveLeft();
         buffer.delete();
         assertEquals("b", buffer.toString());
         assertEquals(0, buffer.getCursorPosition());
@@ -63,11 +63,11 @@ public class SimpleStringBufferTests {
         SimpleStringBuffer buffer = new SimpleStringBuffer();
         buffer.insert('a');
         buffer.insert('b');
-        buffer.moveForwards();
+        buffer.moveRights();
         assertEquals(2, buffer.getCursorPosition()); // cursor shouldn't go off the edge
-        buffer.moveBackwards();
-        buffer.moveBackwards();
-        buffer.moveBackwards();
+        buffer.moveLeft();
+        buffer.moveLeft();
+        buffer.moveLeft();
         assertEquals(0, buffer.getCursorPosition());
     }
 

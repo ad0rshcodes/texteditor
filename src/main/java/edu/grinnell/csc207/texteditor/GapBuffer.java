@@ -5,11 +5,19 @@ package edu.grinnell.csc207.texteditor;
  */
 public class GapBuffer {
     private static final int INITIAL_CAPACITY = 10;
+
     private char[] buffer; // backing array for the buffer
+
     private int gapStart; // start index of the gap
+
     private int gapEnd; // end index of the gap
+
     private int cursor; // current position of the cursor
 
+    /**
+     * Constructor: Initialises the buffer with INITIAL_CAPACITY
+     * Initialises the cursor position, gapstart with 0.
+     */
     public GapBuffer() {
         buffer = new char[INITIAL_CAPACITY];
         gapStart = 0;
